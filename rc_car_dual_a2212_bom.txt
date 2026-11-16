@@ -1,0 +1,102 @@
+================================================================================
+DIY DUAL-MOTOR BRUSHLESS RC CAR - COMPLETE BILL OF MATERIALS (BOM) & SETUP GUIDE
+================================================================================
+
+PROJECT OVERVIEW
+- Drivetrain: Dual A2212 1400KV Brushless Motors (Forward, Brake & Reverse)
+- Speed Controllers: 2x SimonK 30A Forward-Only ESCs + 4-Channel 5V Relay Phase-Swapper
+- Controller: ESP32 Dev Board (3.3V Logic)
+- Battery: 2S (7.4V Nominal / 8.4V Full) 2200mAh 80C LiPo
+
+--------------------------------------------------------------------------------
+1. CORE PARTS ALREADY OWNED (INR 0 EXTRA COST)
+--------------------------------------------------------------------------------
+[Qty: 1] LiPo Battery - 2S (7.4V) 2200mAh 80C
+         Role: Main power pack (176A burst rating; easily handles ~25-30A peak).
+
+[Qty: 2] Brushless Motors - A2212 1400KV Outrunner
+         Role: Dual-drive or left/right propulsion (~10A-14A draw each).
+
+[Qty: 2] Brushless ESCs - SimonK 30A (Forward-only, built-in 5V/2A BEC)
+         Role: Motor speed control + two isolated 5V power rails.
+
+[Qty: 1] Microcontroller - ESP32 Development Board (30-pin or 38-pin)
+         Role: Reads user input, enforces 400ms brake delay, controls ESCs & relays.
+
+--------------------------------------------------------------------------------
+2. ADDITIONAL PARTS TO BUY (EST. TOTAL: INR 450 - INR 650)
+--------------------------------------------------------------------------------
+[Qty: 1] 5V 4-Channel Optocoupler Relay Module (10A 30V DC contacts)
+         Est. Price: INR 150 - INR 170
+         Why Needed: Swaps two motor wires per ESC for safe electronic reverse.
+
+[Qty: 1] 1S-8S LiPo Voltage Tester & Low-Voltage Buzzer Alarm
+         Est. Price: INR 100 - INR 110
+         Why Needed: Plugs into balance port; beeps at 3.3V/cell to protect LiPo.
+
+[Qty: 2m] 16AWG Silicone Wire (1m Red + 1m Black)
+         Est. Price: INR 100 - INR 110
+         Why Needed: Heavy-gauge wire between ESC outputs and relay screw terminals.
+
+[Qty: 1] Battery Parallel Y-Harness (XT60 or Deans - match your battery plug)
+         Est. Price: INR 150 - INR 200 (INR 0 if soldering both ESCs to one plug)
+         Why Needed: Splits single 2S LiPo power cleanly to both SimonK 30A ESCs.
+
+[Qty: 1 pack] Female-to-Female Dupont Jumper Wires (10-20cm, 10 pcs)
+         Est. Price: INR 40 - INR 60
+         Why Needed: Connects ESP32 GPIOs, ESC signal pins, and relay IN1-IN4.
+
+[Qty: 1] Steering Servo - MG90S (metal gear) or SG90 (if not already owned)
+         Est. Price: INR 120 - INR 220
+         Why Needed: Front-wheel steering (powered safely by ESC #2's 5V BEC).
+
+--------------------------------------------------------------------------------
+3. OPTIONAL VOLTAGE DIVIDER RESISTORS (ONLY IF USING A 5V RC RECEIVER)
+--------------------------------------------------------------------------------
+- If controlling ESP32 via Bluetooth / Wi-Fi / Smartphone / Gamepad: INR 0 needed.
+- If using a standard 5V RC Receiver (e.g., FlySky FS-iA6B):
+  [Qty: 2] 1k Ohm Resistors + [Qty: 2] 2k Ohm Resistors (Est. INR 10 total)
+  Purpose: Steps down 5V receiver PWM signals to 3.3V safe levels for ESP32 GPIOs.
+
+--------------------------------------------------------------------------------
+4. POWER DISTRIBUTION & WIRING RULES (CRITICAL FOR HARDWARE SAFETY)
+--------------------------------------------------------------------------------
+A. Dual 5V BEC Split (DO NOT tie the two red 5V ESC wires together):
+   - ESC #1 Red (+5V)  --> Powers ESP32 (VIN/5V pin) + 4-Channel Relay Board (VCC).
+                           Keep the JD-VCC / VCC jumper cap INSTALLED on relay board.
+   - ESC #2 Red (+5V)  --> Powers Steering Servo (+5V) + RC Receiver (if used).
+   - Common Ground     --> Connect Black GND wires of ESC #1, ESC #2, ESP32,
+                           Relay Board, and Servo all together.
+
+B. Safe ESP32 GPIO Pin Selection:
+   - Use safe pins: GPIO 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33.
+   - AVOID strapping pins (GPIO 0, 2, 12, 15) for relays to prevent boot glitches.
+
+C. Relay Phase-Swapper Wiring (Repeat for Motor 1 on Relays 1-2 & Motor 2 on Relays 3-4):
+   - ESC Wire 3  --> Direct to Motor Wire 3 (no relay)
+   - Relay A COM --> Motor Wire 1 | NC --> ESC Wire 1 | NO --> ESC Wire 2
+   - Relay B COM --> Motor Wire 2 | NC --> ESC Wire 2 | NO --> ESC Wire 1
+
+--------------------------------------------------------------------------------
+5. GOLDEN SAFETY RULES & EMPIRICAL MOTOR STOP-TIME CALIBRATION
+--------------------------------------------------------------------------------
+1. MANDATORY STOP-TIME TEST:
+   Before driving, empirically measure how long your A2212 motors take to come to
+   a dead stop from 100% throttle.
+   - Formula: Firmware Delay = (Measured Stop Time x 1.30) + 50ms contact settle.
+   - Typical with SimonK Brake ON: ~150ms-220ms stop time -> set delay to 300ms-350ms.
+   - Typical with SimonK Brake OFF: ~600ms-900ms stop time -> set delay to 850ms-1200ms.
+   - Test Method: Record high-speed 120fps video of the spinning motor with white tape,
+     or use the ESP32 serial calibration sketch to measure exact milliseconds.
+
+2. NEVER switch relays while throttle > 1000us or while motor is still spinning!
+   Always drop ESC signal to 1000us (0% throttle), wait the calibrated dead-time,
+   toggle relays, wait 50ms, then apply reverse throttle.
+3. Enable SimonK built-in brake on both ESCs via the throttle calibration beep menu.
+   This drops spin-down time by over 60%, protecting relays and speeding up recovery.
+4. Insulate all exposed solder joints and the bottom of the relay board with heat
+   shrink or electrical tape so chassis parts cannot cause a short circuit.
+5. Mount the relay board on vibration-damping foam tape to prevent contact chatter
+   on the 2-5mm redstone tile seams.
+6. Double-check battery plug type (XT60 vs Deans T-plug) before ordering adapters.
+================================================================================

@@ -1,0 +1,11 @@
+# Build artifacts
+.pio/
+.vscode/
+*.bin
+*.elf
+*.hex
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini

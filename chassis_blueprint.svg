@@ -1,0 +1,295 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="100%" height="100%" style="background:#0d1117; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="carbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f242d" />
+      <stop offset="100%" stop-color="#14171d" />
+    </linearGradient>
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e6edfa" />
+      <stop offset="50%" stop-color="#9aa5b8" />
+      <stop offset="100%" stop-color="#5a6375" />
+    </linearGradient>
+    <linearGradient id="motorGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c5cdd9" />
+      <stop offset="50%" stop-color="#eef3f9" />
+      <stop offset="100%" stop-color="#8c96a6" />
+    </linearGradient>
+    <linearGradient id="shockRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff4d4d" />
+      <stop offset="50%" stop-color="#cc1111" />
+      <stop offset="100%" stop-color="#800000" />
+    </linearGradient>
+    <linearGradient id="tireGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2a2d32" />
+      <stop offset="50%" stop-color="#42474f" />
+      <stop offset="100%" stop-color="#1a1c1e" />
+    </linearGradient>
+    <linearGradient id="tbarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1b5e20" />
+      <stop offset="50%" stop-color="#2e7d32" />
+      <stop offset="100%" stop-color="#1b5e20" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+    <filter id="glowBlue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="glow"/>
+      <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Grid Pattern -->
+  <g opacity="0.07" stroke="#58a6ff" stroke-width="1">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none"/>
+    </pattern>
+    <rect width="1000" height="800" fill="url(#grid)" />
+  </g>
+
+  <!-- Title & Specs Banner -->
+  <g transform="translate(50, 45)">
+    <text x="0" y="0" fill="#58a6ff" font-size="22" font-weight="700" letter-spacing="1">1/10 RWD RC KART • F1 FLOATING POD SUSPENSION</text>
+    <text x="0" y="24" fill="#8b949e" font-size="13">Solid Live Rear Axle (8mm) • Center Pitch Shock • T-Bar Flex Pivot • RS-540 Mid-Rear</text>
+  </g>
+
+  <!-- MAIN TOP-DOWN CHASSIS DRAWING (Centered in viewBox) -->
+  <g transform="translate(100, 100)">
+
+    <!-- T-BAR FLEX PLATE (Underneath Main Chassis & Rear Pod) -->
+    <!-- Front stem bolts to main chassis, rear crossbar bolts to rear pod -->
+    <g id="t-bar" filter="url(#shadow)">
+      <path d="M 420 270 
+               L 560 270 
+               L 560 210 
+               L 630 210 
+               L 630 390 
+               L 560 390 
+               L 560 330 
+               L 420 330 Z" 
+            fill="url(#tbarGrad)" stroke="#4caf50" stroke-width="2" rx="4"/>
+      <!-- Mounting Screws on T-Bar -->
+      <circle cx="450" cy="300" r="4" fill="#e6edfa" stroke="#333"/>
+      <circle cx="490" cy="300" r="4" fill="#e6edfa" stroke="#333"/>
+      <circle cx="610" cy="240" r="4" fill="#e6edfa" stroke="#333"/>
+      <circle cx="610" cy="360" r="4" fill="#e6edfa" stroke="#333"/>
+      <text x="440" y="290" fill="#a5d6a7" font-size="11" font-weight="600">G10 FLEX T-BAR</text>
+    </g>
+
+    <!-- 1. MAIN CHASSIS PLATE (Carbon Fiber / Aluminum) -->
+    <g id="main-chassis" filter="url(#shadow)">
+      <path d="M 120 180 
+               L 260 160 
+               L 530 180 
+               L 530 260 
+               L 480 260 
+               L 480 340 
+               L 530 340 
+               L 530 420 
+               L 260 440 
+               L 120 420 
+               L 100 370 
+               L 100 230 Z" 
+            fill="url(#carbonGrad)" stroke="#30363d" stroke-width="3" rx="8"/>
+      
+      <!-- Centerline datum line -->
+      <line x1="80" y1="300" x2="720" y2="300" stroke="#58a6ff" stroke-width="1" stroke-dasharray="8 6" opacity="0.4"/>
+    </g>
+
+    <!-- 2. FRONT SUSPENSION & STEERING -->
+    <g id="front-assembly">
+      <!-- Front Track Line -->
+      <line x1="140" y1="80" x2="140" y2="520" stroke="#8b949e" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+      
+      <!-- Front Bulkhead / Carbon Mount -->
+      <rect x="110" y="240" width="60" height="120" rx="4" fill="#21262d" stroke="#58a6ff" stroke-width="1.5"/>
+      
+      <!-- Steering Servo (Center) -->
+      <rect x="220" y="270" width="55" height="60" rx="3" fill="#161b22" stroke="#e6edfa" stroke-width="1"/>
+      <rect x="235" y="285" width="25" height="30" rx="2" fill="#30363d"/>
+      <circle cx="265" cy="300" r="8" fill="#58a6ff"/>
+      <!-- Servo Horn -->
+      <path d="M 265 292 L 278 285 L 278 315 L 265 308 Z" fill="#e6edfa"/>
+      
+      <!-- Steering Tie-Rods -->
+      <line x1="275" y1="288" x2="140" y2="155" stroke="#9aa5b8" stroke-width="4" stroke-linecap="round"/>
+      <line x1="275" y1="312" x2="140" y2="445" stroke="#9aa5b8" stroke-width="4" stroke-linecap="round"/>
+      <!-- Ball Studs -->
+      <circle cx="140" cy="155" r="5" fill="#ff7b72"/>
+      <circle cx="140" cy="445" r="5" fill="#ff7b72"/>
+
+      <!-- Front Left & Right Arms with Kingpins & Coil Springs -->
+      <!-- Left Kingpin Block -->
+      <g transform="translate(130, 130)">
+        <rect x="0" y="0" width="22" height="30" rx="3" fill="url(#metalGrad)" stroke="#222"/>
+        <!-- Kingpin Coil Spring -->
+        <rect x="7" y="-12" width="8" height="12" fill="none" stroke="#f2cc60" stroke-width="2.5" stroke-dasharray="2 2"/>
+        <line x1="11" y1="-18" x2="11" y2="35" stroke="#e6edfa" stroke-width="3"/>
+      </g>
+      <!-- Right Kingpin Block -->
+      <g transform="translate(130, 440)">
+        <rect x="0" y="0" width="22" height="30" rx="3" fill="url(#metalGrad)" stroke="#222"/>
+        <!-- Kingpin Coil Spring -->
+        <rect x="7" y="30" width="8" height="12" fill="none" stroke="#f2cc60" stroke-width="2.5" stroke-dasharray="2 2"/>
+        <line x1="11" y1="-5" x2="11" y2="48" stroke="#e6edfa" stroke-width="3"/>
+      </g>
+
+      <!-- Front Left Wheel & Tire (65mm OD) -->
+      <g id="front-left-wheel" filter="url(#shadow)">
+        <rect x="105" y="70" width="70" height="50" rx="6" fill="url(#tireGrad)" stroke="#111" stroke-width="1.5"/>
+        <rect x="120" y="80" width="40" height="30" rx="3" fill="#21262d" stroke="#58a6ff" stroke-width="1"/>
+        <circle cx="140" cy="95" r="6" fill="#e6edfa"/>
+      </g>
+
+      <!-- Front Right Wheel & Tire (65mm OD) -->
+      <g id="front-right-wheel" filter="url(#shadow)">
+        <rect x="105" y="480" width="70" height="50" rx="6" fill="url(#tireGrad)" stroke="#111" stroke-width="1.5"/>
+        <rect x="120" y="490" width="40" height="30" rx="3" fill="#21262d" stroke="#58a6ff" stroke-width="1"/>
+        <circle cx="140" cy="505" r="6" fill="#e6edfa"/>
+      </g>
+    </g>
+
+    <!-- 3. BATTERY & ELECTRONICS (On Main Chassis) -->
+    <!-- 2S LiPo Battery Pack -->
+    <g id="battery-pack" filter="url(#shadow)" transform="translate(300, 185)">
+      <rect x="0" y="0" width="130" height="50" rx="5" fill="#1f6feb" stroke="#388bfd" stroke-width="1.5"/>
+      <text x="18" y="30" fill="#ffffff" font-size="13" font-weight="700" letter-spacing="1">2S LiPo 7.4V (8.4V Max)</text>
+      <!-- Battery Straps -->
+      <rect x="30" y="-3" width="12" height="56" fill="#0d1117" opacity="0.7"/>
+      <rect x="90" y="-3" width="12" height="56" fill="#0d1117" opacity="0.7"/>
+    </g>
+
+    <!-- ESC (Hobbywing QuicRun 1060 / ESP32 Controller) -->
+    <g id="esc-module" filter="url(#shadow)" transform="translate(310, 360)">
+      <rect x="0" y="0" width="60" height="50" rx="4" fill="#da3633" stroke="#f85149" stroke-width="1.5"/>
+      <!-- Heatsink Fins -->
+      <line x1="12" y1="10" x2="12" y2="40" stroke="#ffffff" stroke-width="2"/>
+      <line x1="22" y1="10" x2="22" y2="40" stroke="#ffffff" stroke-width="2"/>
+      <line x1="32" y1="10" x2="32" y2="40" stroke="#ffffff" stroke-width="2"/>
+      <line x1="42" y1="10" x2="42" y2="40" stroke="#ffffff" stroke-width="2"/>
+      <text x="6" y="62" fill="#ff7b72" font-size="10" font-weight="600">60A ESC</text>
+    </g>
+    <!-- Receiver / ESP32 Brain -->
+    <g id="receiver" filter="url(#shadow)" transform="translate(390, 365)">
+      <rect x="0" y="0" width="45" height="40" rx="3" fill="#161b22" stroke="#8b949e" stroke-width="1"/>
+      <circle cx="10" cy="10" r="3" fill="#3fb950"/>
+      <text x="7" y="28" fill="#c9d1d9" font-size="9" font-weight="600">ESP32 / Rx</text>
+    </g>
+
+    <!-- 4. FLOATING REAR MOTOR POD (The Core Innovation) -->
+    <g id="rear-pod" filter="url(#shadow)">
+      
+      <!-- Lower Pod Plate (Behind T-Bar) -->
+      <rect x="580" y="210" width="130" height="180" rx="6" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+      
+      <!-- Left Axle Bulkhead -->
+      <rect x="650" y="215" width="25" height="35" rx="3" fill="url(#metalGrad)" stroke="#30363d"/>
+      <circle cx="662" cy="232" r="8" fill="#161b22" stroke="#f2cc60" stroke-width="2"/> <!-- Bearing -->
+
+      <!-- Right Motor Mount & Axle Bulkhead -->
+      <rect x="640" y="325" width="45" height="60" rx="3" fill="url(#metalGrad)" stroke="#30363d"/>
+      <circle cx="662" cy="368" r="8" fill="#161b22" stroke="#f2cc60" stroke-width="2"/> <!-- Bearing -->
+
+      <!-- RS-540 BRUSHED MOTOR (Mounted on Right Bulkhead) -->
+      <g id="motor-rs540" transform="translate(585, 290)">
+        <rect x="0" y="0" width="65" height="42" rx="6" fill="url(#motorGrad)" stroke="#30363d" stroke-width="1.5"/>
+        <!-- Motor Vent Slots -->
+        <rect x="12" y="8" width="6" height="26" rx="2" fill="#21262d"/>
+        <rect x="24" y="8" width="6" height="26" rx="2" fill="#21262d"/>
+        <!-- Shaft & Pinion -->
+        <rect x="65" y="17" width="15" height="8" fill="#f2cc60" stroke="#111"/>
+        <text x="6" y="25" fill="#0d1117" font-size="11" font-weight="700">RS-540</text>
+      </g>
+
+      <!-- 8mm SOLID STEEL LIVE AXLE -->
+      <rect x="658" y="110" width="9" height="380" rx="4" fill="url(#metalGrad)" stroke="#111" stroke-width="1.5"/>
+
+      <!-- GEAR TRANSMISSION (Locked Mesh inside Pod) -->
+      <!-- 48DP Pinion (Motor) -->
+      <circle cx="658" cy="307" r="10" fill="#f2cc60" stroke="#111" stroke-width="1.5"/>
+      <!-- 48DP Spur Gear (Locked to Axle) -->
+      <circle cx="662" cy="335" r="24" fill="#ff7b72" stroke="#b62324" stroke-width="1.5" stroke-dasharray="3 1.5"/>
+      <circle cx="662" cy="335" r="8" fill="#21262d"/>
+
+      <!-- CENTRAL COIL-OVER SHOCK ABSORBER (Pitch / Bump Damping) -->
+      <g id="central-shock" transform="translate(480, 293)">
+        <!-- Chassis Arch Mount (Front Ball Stud) -->
+        <rect x="0" y="3" width="16" height="8" rx="2" fill="#58a6ff"/>
+        <!-- Shock Shaft -->
+        <line x1="16" y1="7" x2="115" y2="7" stroke="#e6edfa" stroke-width="4"/>
+        <!-- Shock Body (Red Anodized) -->
+        <rect x="60" y="0" width="45" height="14" rx="3" fill="url(#shockRed)" stroke="#30363d"/>
+        <!-- External Coil Spring -->
+        <path d="M 22 2 Q 26 12 30 7 Q 34 2 38 7 Q 42 12 46 7 Q 50 2 54 7 Q 58 12 62 7" 
+              fill="none" stroke="#f2cc60" stroke-width="3" stroke-linecap="round"/>
+        <!-- Rear Ball Stud to Pod Top Brace -->
+        <circle cx="115" cy="7" r="5" fill="#58a6ff"/>
+      </g>
+
+      <!-- Side Roll Springs / O-Rings -->
+      <g transform="translate(540, 225)">
+        <circle cx="0" cy="0" r="8" fill="none" stroke="#f2cc60" stroke-width="3"/>
+        <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+      </g>
+      <g transform="translate(540, 375)">
+        <circle cx="0" cy="0" r="8" fill="none" stroke="#f2cc60" stroke-width="3"/>
+        <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+      </g>
+
+      <!-- REAR WHEELS & TIRES (Locked to 8mm Solid Axle with 12mm Clamping Hex) -->
+      <!-- Rear Left Wheel (65mm OD) -->
+      <g id="rear-left-wheel" filter="url(#shadow)">
+        <rect x="625" y="65" width="75" height="55" rx="6" fill="url(#tireGrad)" stroke="#111" stroke-width="1.5"/>
+        <rect x="640" y="75" width="45" height="35" rx="3" fill="#21262d" stroke="#58a6ff" stroke-width="1"/>
+        <circle cx="662.5" cy="92.5" r="7" fill="#f2cc60"/> <!-- Clamping Nut -->
+      </g>
+      <!-- Rear Right Wheel (65mm OD) -->
+      <g id="rear-right-wheel" filter="url(#shadow)">
+        <rect x="625" y="480" width="75" height="55" rx="6" fill="url(#tireGrad)" stroke="#111" stroke-width="1.5"/>
+        <rect x="640" y="490" width="45" height="35" rx="3" fill="#21262d" stroke="#58a6ff" stroke-width="1"/>
+        <circle cx="662.5" cy="507.5" r="7" fill="#f2cc60"/> <!-- Clamping Nut -->
+      </g>
+    </g>
+
+  </g>
+
+  <!-- CALLOUT LABELS & ANNOTATIONS -->
+  <g transform="translate(0, 0)">
+    <!-- Callout 1: Sprung Kingpin -->
+    <path d="M 230 180 L 150 180 L 140 230" fill="none" stroke="#f2cc60" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="240" y="184" fill="#f2cc60" font-size="12" font-weight="600">SPRUNG KINGPIN (BUMP COMPLIANCE)</text>
+
+    <!-- Callout 2: T-Bar Pivot -->
+    <path d="M 520 160 L 580 160 L 610 270" fill="none" stroke="#4caf50" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="360" y="155" fill="#4caf50" font-size="12" font-weight="600">FLEXIBLE T-BAR HINGE (PITCH &amp; ROLL)</text>
+
+    <!-- Callout 3: Center Shock -->
+    <path d="M 680 340 L 730 340 L 620 395" fill="none" stroke="#ff7b72" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="740" y="344" fill="#ff7b72" font-size="12" font-weight="600">CENTRAL COIL-OVER SHOCK (55mm)</text>
+
+    <!-- Callout 4: Fixed Gear Mesh -->
+    <path d="M 850 440 L 760 440 L 762 435" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="770" y="435" fill="#58a6ff" font-size="12" font-weight="600">LOCKED GEAR MESH (NEVER STRIPS)</text>
+
+    <!-- Callout 5: Solid Axle -->
+    <path d="M 850 580 L 770 580 L 762 550" fill="none" stroke="#e6edfa" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="780" y="584" fill="#e6edfa" font-size="12" font-weight="600">8mm SOLID STEEL LIVE AXLE (SPOOL)</text>
+
+    <!-- Dimension Callouts -->
+    <g transform="translate(100, 680)" fill="#8b949e" font-size="12">
+      <!-- Wheelbase -->
+      <line x1="140" y1="20" x2="662" y2="20" stroke="#8b949e" stroke-width="1.5"/>
+      <circle cx="140" cy="20" r="3" fill="#58a6ff"/>
+      <circle cx="662" cy="20" r="3" fill="#58a6ff"/>
+      <text x="360" y="15" fill="#58a6ff" font-weight="600">WHEELBASE: ~255 mm</text>
+      
+      <!-- Track Width -->
+      <line x1="720" y1="-585" x2="720" y2="-175" stroke="#8b949e" stroke-width="1.5"/>
+      <circle cx="720" cy="-585" r="3" fill="#58a6ff"/>
+      <circle cx="720" cy="-175" r="3" fill="#58a6ff"/>
+      <text x="730" y="-380" fill="#58a6ff" font-weight="600" transform="rotate(90 730 -380)">TRACK WIDTH: 185 mm</text>
+    </g>
+  </g>
+</svg>
