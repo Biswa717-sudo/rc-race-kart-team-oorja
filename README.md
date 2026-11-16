@@ -12,13 +12,22 @@ Comprehensive engineering specifications, 3D CAD renders, vector blueprints, fir
 
 ## 📸 3D CAD Renders & Visual Blueprints
 
-### 1. Pure Competition Go-Kart Architecture
+### 1. Hybrid Architecture: Formula 1 Aero Shell on Go-Kart Chassis *(Recommended Visual)*
+*Sleek modular F1 aero body (Halo safety bar, front wing with 30° rockered ski-ramp underside, cooling NACA sidepods, shark-fin engine cover) mounted via decoupled floating silicone mounts over a 2.5mm aluminum go-kart chassis pan.*
+
+![F1 on Kart Hybrid 3D Render](f1_kart_hybrid_render.jpg)
+
+---
+
+### 2. Pure Competition Go-Kart Architecture
 *Authentic perimeter tubular frame, side nerf bars, side-mounted motor, central bucket seat, and 8mm exposed live axle.*
 
 ![Pure Kart 3D Render](pure_kart_render.jpg)
 *Vector Blueprint available at: [`pure_kart_blueprint.svg`](pure_kart_blueprint.svg)*
 
-### 2. Alternative F1 Floating Pod Suspension
+---
+
+### 3. Alternative F1 Floating Pod Suspension
 *T-Bar flex pivot with central 55mm coil-over pitch damper.*
 
 ![F1 Pod 3D Render](rc_chassis_render.jpg)
