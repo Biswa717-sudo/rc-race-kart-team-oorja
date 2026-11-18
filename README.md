@@ -58,6 +58,20 @@ Every subsystem, calculation, and timeline has been thoroughly documented and ve
 * **[Timeline 3 Build Manual (The Vector Kart)](docs/TIMELINE_3_VECTOR_KART.md)**: 2x A2212 + Split Stub Axles + Ackermann Torque Vectoring (10–14 Days, ~₹2,850 – ₹3,500).
 * **[Master Timeline Comparison Matrix](docs/MASTER_TIMELINE_COMPARISON.md)**: Multi-dimensional engineering & financial breakdown across all 3 timelines.
 * **[Subsystem Options & Pros/Cons Trade-Off Study](docs/SUBSYSTEM_OPTIONS_PROS_CONS.md)**: Exhaustive trade-off analysis of chassis materials, gearing, steering geometry, reverse mechanisms, and wheel hubs.
+* **[Powertrain & GT2 Drivetrain Simulation Guide](docs/POWERTRAIN_SIMULATION_GUIDE.md)**: Deep physics simulation comparing 1400KV vs 1000KV motors, GT2 belt tooth shear limits, and 600g sprint dynamics.
+
+---
+
+## 🔬 Interactive Simulation & Analysis Tools
+
+1. **Powertrain & GT2 Drivetrain Simulator (1400KV vs 1000KV across all Timelines)**:
+   * **MATLAB GUI**: [`rc_kart_powertrain_simulator.m`](rc_kart_powertrain_simulator.m)
+   * **Python Standalone**: [`rc_kart_powertrain_simulator.py`](rc_kart_powertrain_simulator.py)
+   * *Features:* 12 interactive continuous sliders, 600g mass baseline, 7m straight sprint integration, traction limits, GT2 teeth in mesh, and side-by-side timeline HUD.
+2. **Tripod-Plate Modified 4-Bar Steering Kinematics Analyzer**:
+   * **MATLAB GUI**: [`rc_kart_tripod_steering_geometry.m`](rc_kart_tripod_steering_geometry.m)
+   * **Python Standalone**: [`rc_kart_tripod_steering_geometry.py`](rc_kart_tripod_steering_geometry.py)
+   * *Features:* 12 continuous geometric sliders, 2D kinematic top view with tires, dynamic chassis jacking ($\Delta z_{\text{jack}}$), and Ackermann % curve.
 
 ---
 
