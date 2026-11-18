@@ -64,11 +64,15 @@ Every subsystem, calculation, and timeline has been thoroughly documented and ve
 
 ## 🔬 Interactive Simulation & Analysis Tools
 
-1. **Powertrain & GT2 Drivetrain Simulator (1400KV vs 1000KV across all Timelines)**:
+1. **Timeline 1 Full Race Track Circuit Simulator (1400KV vs 1000KV on 44.85m Circuit)**:
+   * **Python Standalone**: [`rc_kart_timeline1_fulltrack_sim.py`](rc_kart_timeline1_fulltrack_sim.py)
+   * **MATLAB GUI**: [`rc_kart_timeline1_fulltrack_sim.m`](rc_kart_timeline1_fulltrack_sim.m)
+   * *Features:* Complete point-mass two-pass forward-acceleration & backward-braking lap solver, 2D track speed heatmap, velocity profiles $v(s)$, GT2 tooth shear safety factor across the lap, electrical current/power draw, flying lap vs standing start, and 8-lap endurance telemetry.
+2. **Powertrain & GT2 Drivetrain Simulator (1400KV vs 1000KV across all Timelines - Straight Sprint)**:
    * **MATLAB GUI**: [`rc_kart_powertrain_simulator.m`](rc_kart_powertrain_simulator.m)
    * **Python Standalone**: [`rc_kart_powertrain_simulator.py`](rc_kart_powertrain_simulator.py)
    * *Features:* 12 interactive continuous sliders, 600g mass baseline, 7m straight sprint integration, traction limits, GT2 teeth in mesh, and side-by-side timeline HUD.
-2. **Tripod-Plate Modified 4-Bar Steering Kinematics Analyzer**:
+3. **Tripod-Plate Modified 4-Bar Steering Kinematics Analyzer**:
    * **MATLAB GUI**: [`rc_kart_tripod_steering_geometry.m`](rc_kart_tripod_steering_geometry.m)
    * **Python Standalone**: [`rc_kart_tripod_steering_geometry.py`](rc_kart_tripod_steering_geometry.py)
    * *Features:* 12 continuous geometric sliders, 2D kinematic top view with tires, dynamic chassis jacking ($\Delta z_{\text{jack}}$), and Ackermann % curve.

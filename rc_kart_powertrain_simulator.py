@@ -520,4 +520,6 @@ btn_comp.on_clicked(on_compare_kv)
 btn_idler.on_clicked(on_toggle_idler)
 
 update()
-plt.show()
+if __name__ == '__main__':
+    plt.show()
+
