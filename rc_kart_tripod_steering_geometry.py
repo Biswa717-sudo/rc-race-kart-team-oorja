@@ -32,34 +32,34 @@ from matplotlib.widgets import Slider, Button
 from matplotlib.patches import Polygon
 
 # =============================================================================
-# DEFAULT BASELINE DIMENSIONS (mm and degrees)
+# DEFAULT BASELINE DIMENSIONS (mm and degrees) - TEAM OORJA K=126, L=130
 # =============================================================================
-DEFAULT_K             = 150.0  # Kingpin Distance (mm)
-DEFAULT_L             = 255.0  # Wheelbase (mm)
-DEFAULT_R_TRIPOD      = 25.0   # Tripod Arc Radius (mm)
-DEFAULT_D_SEP         = 22.0   # Tripod Points Separation (mm)
-DEFAULT_Y_P           = -25.0  # Tripod Pivot Y-Offset (mm)
-DEFAULT_L_ARM         = 22.0   # Control Arm Length (mm)
-DEFAULT_ALPHA_DEG     = 16.0   # Control Arm Inward Angle (deg)
+DEFAULT_K             = 126.0  # Kingpin Distance (mm)
+DEFAULT_L             = 130.0  # Wheelbase (mm)
+DEFAULT_R_TRIPOD      = 22.56  # Tripod Arc Radius (mm) [sqrt(22^2 + 5^2)]
+DEFAULT_D_SEP         = 44.0   # Tripod Points Separation (mm)
+DEFAULT_Y_P           = -30.0  # Tripod Pivot Y-Offset (mm behind front axle)
+DEFAULT_L_ARM         = 20.0   # Control Arm Length (mm)
+DEFAULT_ALPHA_DEG     = 25.0   # Control Arm Inward Angle (deg)
 DEFAULT_CASTER_DEG    = 14.0   # Kingpin Caster Angle (deg)
 DEFAULT_KPI_DEG       = 6.0    # Kingpin Inclination KPI (deg)
-DEFAULT_SCRUB_MM      = 18.0   # Wheel Centerline Scrub Offset (mm)
-DEFAULT_STEER_DEG     = 12.0   # Live Tripod Steer Input (deg)
+DEFAULT_SCRUB_MM      = 12.0   # Wheel Centerline Scrub Offset (mm)
+DEFAULT_STEER_DEG     = 17.0   # Live Tripod Steer Input (deg for 1m hairpin)
 TIRE_DIA              = 65.0   # Tire diameter (mm)
 TIRE_WIDTH            = 26.0   # Tire width (mm)
 
-def compute_neutral_tierod(K, R_tripod, D_sep, L_arm, alpha_deg, y_P):
-    D_sep = min(D_sep, 2.0 * R_tripod - 0.5)
-    phi0 = math.asin((D_sep / 2.0) / R_tripod)
-    x_TL0 = -R_tripod * math.sin(phi0)
-    y_TL0 = y_P - R_tripod * math.cos(phi0)
+DEFAULT_Y_T_OFFSET    = 5.0    # Tripod Hole Offset (+5mm forward of pivot for S-curve Ackermann)
+
+def compute_neutral_tierod(K, D_sep, L_arm, alpha_deg, y_P, y_T_offset=DEFAULT_Y_T_OFFSET):
+    x_TL0 = -D_sep / 2.0
+    y_TL0 = y_P + y_T_offset
     alpha_rad = math.radians(alpha_deg)
     x_JL0 = -K / 2.0 + L_arm * math.sin(alpha_rad)
     y_JL0 = -L_arm * math.cos(alpha_rad)
     return math.hypot(x_JL0 - x_TL0, y_JL0 - y_TL0)
 
 DEFAULT_L_TIEROD = compute_neutral_tierod(
-    DEFAULT_K, DEFAULT_R_TRIPOD, DEFAULT_D_SEP, DEFAULT_L_ARM, DEFAULT_ALPHA_DEG, DEFAULT_Y_P
+    DEFAULT_K, DEFAULT_D_SEP, DEFAULT_L_ARM, DEFAULT_ALPHA_DEG, DEFAULT_Y_P, DEFAULT_Y_T_OFFSET
 )
 
 def circle_intersect(C1, r1, C2, r2):
@@ -79,9 +79,7 @@ def circle_intersect(C1, r1, C2, r2):
     p2 = (x2 - h * dy / d, y2 + h * dx / d)
     return p1 if p1[1] < p2[1] else p2
 
-def solve_kinematics(K, L, R_tripod, D_sep, L_tierod, alpha_deg, L_arm, y_P, th_range_deg):
-    D_sep = min(D_sep, 2.0 * R_tripod - 0.5)
-    phi0 = math.asin((D_sep / 2.0) / R_tripod)
+def solve_kinematics(K, L, D_sep, y_T_offset, L_tierod, alpha_deg, L_arm, y_P, th_range_deg):
     KL = (-K / 2.0, 0.0)
     KR = ( K / 2.0, 0.0)
     alpha_rad = math.radians(alpha_deg)
@@ -91,6 +89,9 @@ def solve_kinematics(K, L, R_tripod, D_sep, L_tierod, alpha_deg, L_arm, y_P, th_
     ang_L0  = math.atan2(JL0_ref[1] - KL[1], JL0_ref[0] - KL[0])
     ang_R0  = math.atan2(JR0_ref[1] - KR[1], JR0_ref[0] - KR[0])
 
+    vL0 = (-D_sep / 2.0, y_T_offset)
+    vR0 = ( D_sep / 2.0, y_T_offset)
+
     inner_arr = []
     outer_arr = []
     ideal_arr = []
@@ -99,8 +100,8 @@ def solve_kinematics(K, L, R_tripod, D_sep, L_tierod, alpha_deg, L_arm, y_P, th_
 
     for th_deg in th_range_deg:
         th_rad = math.radians(th_deg)
-        TL = (-R_tripod * math.sin(phi0 - th_rad), y_P - R_tripod * math.cos(phi0 - th_rad))
-        TR = ( R_tripod * math.sin(phi0 + th_rad), y_P - R_tripod * math.cos(phi0 + th_rad))
+        TL = (vL0[0]*math.cos(th_rad) - vL0[1]*math.sin(th_rad), y_P + vL0[0]*math.sin(th_rad) + vL0[1]*math.cos(th_rad))
+        TR = (vR0[0]*math.cos(th_rad) - vR0[1]*math.sin(th_rad), y_P + vR0[0]*math.sin(th_rad) + vR0[1]*math.cos(th_rad))
 
         JL = circle_intersect(KL, L_arm, TL, L_tierod)
         JR = circle_intersect(KR, L_arm, TR, L_tierod)
@@ -161,17 +162,17 @@ ax_bg        = '#22252C'
 
 sliders = {}
 slider_params = [
-    ('Kingpin Distance (K)',          110,  200, DEFAULT_K,          'K',             '%.1f mm'),
-    ('Wheelbase (L)',                 200,  350, DEFAULT_L,          'L',             '%.1f mm'),
-    ('Tripod Arc Radius (R)',          12,   45, DEFAULT_R_TRIPOD,   'R_tripod',      '%.1f mm'),
-    ('Tripod Points Sep (D_sep)',       6,   40, DEFAULT_D_SEP,      'D_sep',         '%.1f mm'),
-    ('Tripod Pivot Y-Offset (y_P)',   -55,   15, DEFAULT_Y_P,        'y_P',           '%.1f mm'),
-    ('Tie-Rod Length (L_tr)',          40,   95, DEFAULT_L_TIEROD,   'L_tierod',      '%.2f mm'),
-    ('Control Arm Angle (alpha)',       0,   35, DEFAULT_ALPHA_DEG,  'alpha_arm_deg', '%.1f deg'),
-    ('Control Arm Length (L_arm)',     12,   40, DEFAULT_L_ARM,      'L_arm',         '%.1f mm'),
+    ('Kingpin Distance (K)',           90,  180, DEFAULT_K,          'K',             '%.1f mm'),
+    ('Wheelbase (L)',                  90,  220, DEFAULT_L,          'L',             '%.1f mm'),
+    ('Tripod Arc Radius (R)',          10,   40, DEFAULT_R_TRIPOD,   'R_tripod',      '%.1f mm'),
+    ('Tripod Points Sep (D_sep)',      10,   60, DEFAULT_D_SEP,      'D_sep',         '%.1f mm'),
+    ('Tripod Pivot Y-Offset (y_P)',   -55,  -10, DEFAULT_Y_P,        'y_P',           '%.1f mm'),
+    ('Tie-Rod Length (L_tr)',          20,   70, DEFAULT_L_TIEROD,   'L_tierod',      '%.2f mm'),
+    ('Control Arm Angle (alpha)',       0,   40, DEFAULT_ALPHA_DEG,  'alpha_arm_deg', '%.1f deg'),
+    ('Control Arm Length (L_arm)',     12,   35, DEFAULT_L_ARM,      'L_arm',         '%.1f mm'),
     ('Caster Angle (theta_c)',          0,   22, DEFAULT_CASTER_DEG, 'caster_deg',    '%.1f deg'),
     ('Kingpin Inclination (KPI)',       0,   16, DEFAULT_KPI_DEG,    'kpi_deg',       '%.1f deg'),
-    ('Wheel Scrub Offset (W_scrub)',    8,   35, DEFAULT_SCRUB_MM,   'scrub_mm',      '%.1f mm'),
+    ('Wheel Scrub Offset (W_scrub)',    4,   25, DEFAULT_SCRUB_MM,   'scrub_mm',      '%.1f mm'),
     ('Live Tripod Steer Input',       -30,   30, DEFAULT_STEER_DEG,  'steer_input',   '%.1f deg')
 ]
 
@@ -232,11 +233,7 @@ def update(val=None):
     scrub_w   = sliders['scrub_mm'].val
     th_steer  = sliders['steer_input'].val
 
-    if D_sep >= 2.0 * R_tripod:
-        D_sep = 2.0 * R_tripod - 0.5
-        sliders['D_sep'].set_val(D_sep)
-
-    phi0 = math.asin((D_sep / 2.0) / R_tripod)
+    phi0 = math.asin(min(1.0, (D_sep / 2.0) / R_tripod)) if R_tripod > 0 else 0
     KL = (-K / 2.0, 0.0)
     KR = ( K / 2.0, 0.0)
     alpha_rad = math.radians(alpha_deg)
@@ -249,13 +246,15 @@ def update(val=None):
     # Sweep kinematics
     th_sweep = np.linspace(0.1, 26.0, 160)
     inner_s, outer_s, ideal_s, ack_pct_s, y_int_s = solve_kinematics(
-        K, L, R_tripod, D_sep, L_tierod, alpha_deg, L_arm, y_P, th_sweep
+        K, L, D_sep, DEFAULT_Y_T_OFFSET, L_tierod, alpha_deg, L_arm, y_P, th_sweep
     )
 
     # Live point evaluation
     th_live_rad = math.radians(th_steer)
-    TL_live = (-R_tripod * math.sin(phi0 - th_live_rad), y_P - R_tripod * math.cos(phi0 - th_live_rad))
-    TR_live = ( R_tripod * math.sin(phi0 + th_live_rad), y_P - R_tripod * math.cos(phi0 + th_live_rad))
+    vL0 = (-D_sep / 2.0, DEFAULT_Y_T_OFFSET)
+    vR0 = ( D_sep / 2.0, DEFAULT_Y_T_OFFSET)
+    TL_live = (vL0[0]*math.cos(th_live_rad) - vL0[1]*math.sin(th_live_rad), y_P + vL0[0]*math.sin(th_live_rad) + vL0[1]*math.cos(th_live_rad))
+    TR_live = (vR0[0]*math.cos(th_live_rad) - vR0[1]*math.sin(th_live_rad), y_P + vR0[0]*math.sin(th_live_rad) + vR0[1]*math.cos(th_live_rad))
     JL_live = circle_intersect(KL, L_arm, TL_live, L_tierod)
     JR_live = circle_intersect(KR, L_arm, TR_live, L_tierod)
 
@@ -458,12 +457,11 @@ def update(val=None):
 
 def on_zero_toe(event):
     K         = sliders['K'].val
-    R_tripod  = sliders['R_tripod'].val
     D_sep     = sliders['D_sep'].val
     L_arm     = sliders['L_arm'].val
     alpha_deg = sliders['alpha_arm_deg'].val
     y_P       = sliders['y_P'].val
-    calc_L_tr = compute_neutral_tierod(K, R_tripod, D_sep, L_arm, alpha_deg, y_P)
+    calc_L_tr = compute_neutral_tierod(K, D_sep, L_arm, alpha_deg, y_P, DEFAULT_Y_T_OFFSET)
     sliders['L_tierod'].set_val(calc_L_tr)
 
 def on_reset(event):
@@ -478,8 +476,8 @@ def on_reset(event):
     sliders['kpi_deg'].set_val(DEFAULT_KPI_DEG)
     sliders['scrub_mm'].set_val(DEFAULT_SCRUB_MM)
     sliders['steer_input'].set_val(DEFAULT_STEER_DEG)
-    calc_L_tr = compute_neutral_tierod(DEFAULT_K, DEFAULT_R_TRIPOD, DEFAULT_D_SEP,
-                                       DEFAULT_L_ARM, DEFAULT_ALPHA_DEG, DEFAULT_Y_P)
+    calc_L_tr = compute_neutral_tierod(DEFAULT_K, DEFAULT_D_SEP,
+                                       DEFAULT_L_ARM, DEFAULT_ALPHA_DEG, DEFAULT_Y_P, DEFAULT_Y_T_OFFSET)
     sliders['L_tierod'].set_val(calc_L_tr)
 
 for s in sliders.values():

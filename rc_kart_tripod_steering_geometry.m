@@ -32,26 +32,27 @@ function rc_kart_tripod_steering_geometry()
     clc;
 
     % ---------------------------------------------------------------------
-    % Default Baseline Dimensions (in mm and degrees)
+    % Default Baseline Dimensions (in mm and degrees) - TEAM OORJA K=126, L=130
     % ---------------------------------------------------------------------
-    p.K             = 150.0;   % Kingpin Distance (mm)
-    p.L             = 255.0;   % Wheelbase (mm)
-    p.R_tripod      = 25.0;    % Tripod Arc Radius (mm)
-    p.D_sep         = 22.0;    % Tripod Points Separation (mm)
-    p.y_P           = -25.0;   % Tripod Pivot Y-Offset relative to front axle (mm)
-    p.L_arm         = 22.0;    % Control Arm Length (mm)
-    p.alpha_arm_deg = 16.0;    % Control Arm Inward Angle (deg)
+    p.K             = 126.0;   % Kingpin Distance (mm)
+    p.L             = 130.0;   % Wheelbase (mm)
+    p.R_tripod      = 22.56;   % Tripod Arc Radius (mm) [sqrt(22^2 + 5^2)]
+    p.D_sep         = 44.0;    % Tripod Points Separation (mm)
+    p.y_P           = -30.0;   % Tripod Pivot Y-Offset relative to front axle (mm)
+    p.y_T_offset    = 5.0;     % Tripod Hole Offset forward of pivot (mm)
+    p.L_arm         = 20.0;    % Control Arm Length (mm)
+    p.alpha_arm_deg = 25.0;    % Control Arm Inward Angle (deg)
     p.caster_deg    = 14.0;    % Kingpin Caster Angle (deg)
     p.kpi_deg       = 6.0;     % Kingpin Inclination KPI (deg)
-    p.scrub_mm      = 18.0;    % Scrub Offset from Kingpin to Wheel Centerline (mm)
-    p.steer_input   = 12.0;    % Live Tripod Steer Input (deg)
+    p.scrub_mm      = 12.0;    % Scrub Offset from Kingpin to Wheel Centerline (mm)
+    p.steer_input   = 17.0;    % Live Tripod Steer Input (deg for 1m hairpin)
     
     % Tire specifications
     p.tire_dia      = 65.0;    % Tire diameter (mm)
     p.tire_width    = 26.0;    % Tire width (mm)
 
     % Compute default neutral tie-rod length for zero static toe
-    p.L_tierod = compute_neutral_tierod_val(p.K, p.R_tripod, p.D_sep, p.L_arm, p.alpha_arm_deg, p.y_P);
+    p.L_tierod = compute_neutral_tierod_val(p.K, p.D_sep, p.L_arm, p.alpha_arm_deg, p.y_P, p.y_T_offset);
 
     % ---------------------------------------------------------------------
     % Create Figure Window with Dark Theme
@@ -78,17 +79,17 @@ function rc_kart_tripod_steering_geometry()
 
     % Slider definitions: {Name, min, max, default, step, format, tag}
     slider_defs = {
-        'Kingpin Distance (K)',             110,  200, p.K,             1.0,  '%.1f mm',  'K';
-        'Wheelbase (L)',                    200,  350, p.L,             1.0,  '%.1f mm',  'L';
-        'Tripod Arc Radius (R)',             12,   45, p.R_tripod,      0.5,  '%.1f mm',  'R_tripod';
-        'Tripod Points Sep (D_sep)',          6,   40, p.D_sep,         0.5,  '%.1f mm',  'D_sep';
-        'Tripod Pivot Y-Offset (y_P)',      -55,   15, p.y_P,           0.5,  '%.1f mm',  'y_P';
-        'Tie-Rod Length (L_tr)',             40,   95, p.L_tierod,      0.2,  '%.2f mm',  'L_tierod';
-        'Control Arm Angle (alpha)',          0,   35, p.alpha_arm_deg, 0.5,  '%.1f deg', 'alpha_arm_deg';
-        'Control Arm Length (L_arm)',        12,   40, p.L_arm,         0.5,  '%.1f mm',  'L_arm';
+        'Kingpin Distance (K)',              90,  180, p.K,             1.0,  '%.1f mm',  'K';
+        'Wheelbase (L)',                     90,  220, p.L,             1.0,  '%.1f mm',  'L';
+        'Tripod Arc Radius (R)',             10,   40, p.R_tripod,      0.5,  '%.1f mm',  'R_tripod';
+        'Tripod Points Sep (D_sep)',         10,   60, p.D_sep,         0.5,  '%.1f mm',  'D_sep';
+        'Tripod Pivot Y-Offset (y_P)',      -55,  -10, p.y_P,           0.5,  '%.1f mm',  'y_P';
+        'Tie-Rod Length (L_tr)',             20,   70, p.L_tierod,      0.2,  '%.2f mm',  'L_tierod';
+        'Control Arm Angle (alpha)',          0,   40, p.alpha_arm_deg, 0.5,  '%.1f deg', 'alpha_arm_deg';
+        'Control Arm Length (L_arm)',        12,   35, p.L_arm,         0.5,  '%.1f mm',  'L_arm';
         'Caster Angle (theta_c)',             0,   22, p.caster_deg,    0.5,  '%.1f deg', 'caster_deg';
         'Kingpin Inclination (KPI)',          0,   16, p.kpi_deg,       0.5,  '%.1f deg', 'kpi_deg';
-        'Wheel Scrub Offset (W_scrub)',       8,   35, p.scrub_mm,      0.5,  '%.1f mm',  'scrub_mm';
+        'Wheel Scrub Offset (W_scrub)',       4,   25, p.scrub_mm,      0.5,  '%.1f mm',  'scrub_mm';
         'Live Tripod Steer Input',          -30,   30, p.steer_input,   0.5,  '%.1f deg', 'steer_input'
     };
 
@@ -603,11 +604,12 @@ function rc_kart_tripod_steering_geometry()
         fill(ax, gx, gy, color, 'FaceAlpha', 0.85, 'EdgeColor', 'k', 'LineWidth', 1.5);
     end
 
-    function len = compute_neutral_tierod_val(K, R, D_sep, L_arm, alpha_deg, y_P)
-        D_sep = min(D_sep, 2.0 * R - 0.5);
-        phi0 = asin((D_sep / 2.0) / R);
-        x_TL0 = -R * sin(phi0);
-        y_TL0 = y_P - R * cos(phi0);
+    function len = compute_neutral_tierod_val(K, D_sep, L_arm, alpha_deg, y_P, y_T_offset)
+        if nargin < 6
+            y_T_offset = 5.0;
+        end
+        x_TL0 = -D_sep / 2.0;
+        y_TL0 = y_P + y_T_offset;
         x_JL0 = -K / 2.0 + L_arm * sin(deg2rad(alpha_deg));
         y_JL0 = -L_arm * cos(deg2rad(alpha_deg));
         len = sqrt((x_JL0 - x_TL0)^2 + (y_JL0 - y_TL0)^2);
